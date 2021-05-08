@@ -1,0 +1,23 @@
+{
+    "name": "weather-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack serve",
+        "build": "webpack --watch",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Charles Barger",
+    "license": "MIT",
+    "devDependencies": {
+        "eslint": "^7.24.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-plugin-import": "^2.22.1",
+        "prettier": "2.2.1"
+    },
+    "dependencies": {
+        "eslint-config-prettier": "^8.2.0"
+    }
+}

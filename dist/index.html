@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./styles.css" />
+        <title>Document</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <nav>
+            <div>
+                <form action="" id="weatherForm">
+                    <input
+                        class="inputCity"
+                        type="text"
+                        name=""
+                        id="cityFinder"
+                        placeholder="Find A City"
+                    />
+                </form>
+                <span class="warning" id="warning"
+                    >No Matching Location Found</span
+                >
+            </div>
+        </nav>
+        <main>
+            <div class="cityName">
+                <h1 class="title" id="title"></h1>
+                <h3 class="info" id="info"></h3>
+            </div>
+            <div class="cityWeatherinfo">
+                <h2 class="temp" id="temp">
+                    <span class="degree big-degree">&deg;C</span>
+                </h2>
+                <div class="moreInfo">
+                    <span class="feels-like" id="feels-like"
+                        ><span class="degree small-degree">&deg;C</span></span
+                    >
+                    <span class="wind" id="wind"></span>
+                    <span class="humidity" id="humidity"></span>
+                    <div class="toggle-wrapper">
+                        <div class="second-wrapper">
+                            <span class="celcius">&deg;C</span>
+                            <input type="checkbox" name="" id="degree-switch" />
+                            <div class="slider"></div>
+                            <span class="farenheit">&deg;F</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2></h2>
+        </main>
+    </body>
+    <script src="./index.js"></script>
+</html>

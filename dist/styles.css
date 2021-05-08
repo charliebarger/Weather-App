@@ -1,0 +1,187 @@
+body {
+    background-image: url('./images/25501.jpg');
+    background-size: cover;
+    min-height: 90vh;
+    background-repeat: no-repeat;
+    padding: 20px;
+    font-family: 'Libre Baskerville', serif;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0px 20px;
+    font-family: 'Libre Baskerville', serif;
+}
+
+.inputCity {
+    padding: 5px 10px;
+    height: 30px;
+    width: 220px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Libre Baskerville', serif;
+    background: rgba(108, 122, 137, 0.7);
+}
+
+.inputCity::placeholder {
+    color: white;
+    font-size: 16px;
+    opacity: 1 !important;
+}
+
+main {
+    padding: 20px 80px;
+    color: white;
+    margin-top: 50px;
+    font-family: 'Libre Baskerville', serif;
+    min-width: 360px;
+}
+
+.shrinkMe {
+    animation: weatherLeave 1s ease-in-out 0ms forwards;
+}
+
+.warning {
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+    display: none;
+    margin-top: 10px;
+}
+
+@keyframes weatherLeave {
+    0% {
+        transform: scale(0.7);
+    }
+    10% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+.title {
+    max-width: 350px;
+    display: inline-block;
+    margin: 0px;
+    font-size: 38px;
+    padding-bottom: 10px;
+    border-bottom: white solid 2px;
+}
+
+.info {
+    text-transform: capitalize;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.temp {
+    font-size: 120px;
+    margin: 0px;
+}
+
+.cityWeatherinfo {
+    display: flex;
+}
+
+.moreInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-left: 50px;
+    position: relative;
+    bottom: 40px;
+    right: 15px;
+
+    height: 175px;
+}
+
+.big-degree {
+    font-size: 28px;
+    position: relative;
+    bottom: 80px;
+}
+
+.small-degree {
+    font-size: 10px;
+    position: relative;
+    bottom: 6px;
+}
+
+.toggle-wrapper {
+    width: 60px;
+    height: 30px;
+    border: white solid 2px;
+    padding: 2px;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.toggle-wrapper,
+.toggle-wrapper > * {
+    transform: scale(0.9);
+}
+
+.second-wrapper {
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background: rgba(108, 122, 137, 0.7);
+}
+
+.second-wrapper > span {
+    color: white;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.celcius {
+    margin-left: 4px;
+    margin-right: auto;
+}
+.farenheit {
+    margin-left: auto;
+    margin-right: 6px;
+}
+.toggle-wrapper > .second-wrapper > input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: all;
+    margin: 0px;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+
+    transition: 0.4s;
+    pointer-events: none;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    background-color: #fff;
+    transition: 0.2s;
+    pointer-events: none;
+}
+
+input:checked + .slider::before {
+    transform: translate(30px);
+}
+
+input:checked > .farenheit {
+    display: none;
+}
