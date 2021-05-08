@@ -5,16 +5,19 @@ async function getWeatherData(city, units) {
     return response.json()
 }
 
+let temperature
+let feelsLike
+let units
+
 async function processWeatherData(place) {
     try {
-        const units = findPrefferedUnits()
+        units = findPrefferedUnits()
         const json = await getWeatherData(place, units)
         const weatherMain = json.main
         const displayName = `${json.name}, ${json.sys.country}`
         const weatherDescription = json.weather[0].description
-        const temperature = weatherMain.temp
-        const feelsLike = weatherMain.feels_like
-        changeUnits(temperature, feelsLike)
+        temperature = weatherMain.temp
+        feelsLike = weatherMain.feels_like
         const weatherHumidity = weatherMain.humidity
         const wind = json.wind.speed
         return {
@@ -27,8 +30,17 @@ async function processWeatherData(place) {
             wind,
         }
     } catch (error) {
+        showErrorMessage()
         throw new Error('City Not Found')
     }
+}
+
+function showErrorMessage() {
+    document.getElementById('warning').classList.add('show')
+}
+
+function hideErrorMessage() {
+    document.getElementById('warning').classList.remove('show')
 }
 
 function animateNewWeather() {
@@ -41,17 +53,7 @@ function renderData(dataObject) {
     animateNewWeather()
     document.getElementById('title').textContent = dataObject.displayName
     document.getElementById('info').textContent = dataObject.weatherDescription
-    const symbol = formatTemperatures(dataObject.units)
-    document.getElementById(
-        'temp'
-    ).innerHTML = `<h2 class="temp" id="temp">${Math.round(
-        dataObject.temperature
-    )}<span class="degree big-degree">&deg;${symbol}</span></h2>`
-    document.getElementById('feels-like').innerHTML = `
-        <span class="feels-like" id="feels-like">
-            Feels like: ${Math.round(
-                dataObject.feelsLike
-            )}<span class="degree small-degree">&deg;${symbol}</span></span>`
+    renderTemperatures(dataObject.temperature, dataObject.feelsLike)
     document.getElementById('wind').textContent = `Wind : ${Math.round(
         dataObject.wind
     )} mph`
@@ -63,6 +65,9 @@ function renderData(dataObject) {
 const cityFinder = document.getElementById('cityFinder')
 const weatherForm = document.getElementById('weatherForm')
 
+cityFinder.addEventListener('input', () => {
+    hideErrorMessage()
+})
 weatherForm.addEventListener('submit', (e) => {
     e.preventDefault()
     processWeatherData(cityFinder.value).then((response) => {
@@ -73,23 +78,44 @@ weatherForm.addEventListener('submit', (e) => {
 
 const tempSwitch = document.getElementById('degree-switch')
 
-function changeUnits(temp, feelsLike) {
-    tempSwitch.addEventListener('click', () => {
-        if (!tempSwitch.checked) {
-            const temperature = ((Number(temp) - 32) * 5) / 9
-            console.log(temperature)
-            console.log(feelsLike)
-        }
-    })
-}
 tempSwitch.addEventListener('click', () => {
-    const unit = findPrefferedUnits()
+    changeUnits()
 })
 
-function formatTemperatures(unit) {
+function changeUnits() {
+    console.log('hi')
+    let newTemp
+    let newFeelslike
+    if (tempSwitch.checked) {
+        units = 'metric'
+        temperature = ((Number(temperature) - 32) * 5) / 9
+        feelsLike = ((Number(feelsLike) - 32) * 5) / 9
+    } else if (!tempSwitch.checked) {
+        units = 'imperial'
+        temperature = (Number(temperature) * 9) / 5 + 32
+        feelsLike = (Number(feelsLike) * 9) / 5 + 32
+    }
+    renderTemperatures(temperature, feelsLike)
+}
+
+function renderTemperatures(temp, tempFeel) {
+    const symbol = formatTemperatures()
+    document.getElementById(
+        'temp'
+    ).innerHTML = `<h2 class="temp" id="temp">${Math.round(
+        temp
+    )}<span class="degree big-degree">&deg;${symbol}</span></h2>`
+    document.getElementById('feels-like').innerHTML = `
+        <span class="feels-like" id="feels-like">
+            Feels like: ${Math.round(
+                tempFeel
+            )}<span class="degree small-degree">&deg;${symbol}</span></span>`
+}
+
+function formatTemperatures() {
     let symbol
-    console.log(unit)
-    if (unit === 'imperial') {
+    console.log(units)
+    if (units === 'imperial') {
         symbol = 'F'
     } else {
         symbol = 'C'
@@ -97,7 +123,7 @@ function formatTemperatures(unit) {
     return symbol
 }
 
-processWeatherData('Miami', findPrefferedUnits()).then((response) => {
+processWeatherData('Denver', findPrefferedUnits()).then((response) => {
     renderData(response)
 })
 
@@ -109,9 +135,4 @@ function findPrefferedUnits() {
         system = 'imperial'
     }
     return system
-}
-
-function switchUnits() {
-    const system = findPrefferedUnits()
-    const symbol = formatTemperatures(system)
 }

@@ -1,9 +1,9 @@
 body {
     background-image: url('./images/25501.jpg');
     background-size: cover;
-    min-height: 90vh;
+    min-height: 100vh;
     background-repeat: no-repeat;
-    padding: 20px;
+    padding-top: 20px;
     font-family: 'Libre Baskerville', serif;
 }
 
@@ -12,6 +12,7 @@ nav {
     justify-content: flex-end;
     padding: 0px 20px;
     font-family: 'Libre Baskerville', serif;
+    padding-bottom: 30px;
 }
 
 .inputCity {
@@ -33,9 +34,9 @@ nav {
 }
 
 main {
-    padding: 20px 80px;
+    padding: 20px 40px;
     color: white;
-    margin-top: 50px;
+
     font-family: 'Libre Baskerville', serif;
     min-width: 360px;
 }
@@ -48,8 +49,16 @@ main {
     font-size: 16px;
     text-align: center;
     width: 100%;
-    display: none;
+    color: red;
+    height: 20px;
+    display: inline-block;
+    transform: scale(0);
     margin-top: 10px;
+}
+
+.show {
+    display: inline-block;
+    transform: scale(1);
 }
 
 @keyframes weatherLeave {
@@ -82,6 +91,8 @@ main {
 .temp {
     font-size: 120px;
     margin: 0px;
+    min-width: 200px;
+    text-align: center;
 }
 
 .cityWeatherinfo {
@@ -89,6 +100,7 @@ main {
 }
 
 .moreInfo {
+    white-space: nowrap;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -184,4 +196,22 @@ input:checked + .slider::before {
 
 input:checked > .farenheit {
     display: none;
+}
+
+.cityName h1 {
+    width: 100%;
+}
+
+@media screen and (max-width: 450px) {
+    nav {
+        justify-content: center;
+    }
+    main {
+        padding: 20px 0px;
+        transform: scale(0.8);
+    }
+
+    .cityWeatherinfo {
+        justify-content: center;
+    }
 }
