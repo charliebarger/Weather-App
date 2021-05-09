@@ -1,6 +1,13 @@
-async function getWeatherData(city, units) {
+let temperature
+let feelsLike
+let units
+const tempSwitch = document.getElementById('degree-switch')
+const cityFinder = document.getElementById('cityFinder')
+const weatherForm = document.getElementById('weatherForm')
+
+async function getWeatherData(city, weatherUnits) {
     const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=51f808ad6044666815ba2f99bc610f0b&units=${units}`,
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=51f808ad6044666815ba2f99bc610f0b&units=${weatherUnits}`,
         {
             mode: 'cors',
         }
@@ -8,14 +15,32 @@ async function getWeatherData(city, units) {
     return response.json()
 }
 
-let temperature
-let feelsLike
-let units
+// show and hide error messages if wrong city is inputted
+function showErrorMessage() {
+    document.getElementById('warning').classList.add('show')
+}
+
+function hideErrorMessage() {
+    document.getElementById('warning').classList.remove('show')
+}
+
+cityFinder.addEventListener('input', () => {
+    hideErrorMessage()
+})
+
+function findPrefferedUnits() {
+    let system
+    if (tempSwitch.checked) {
+        system = 'metric'
+    } else {
+        system = 'imperial'
+    }
+    return system
+}
 
 async function processWeatherData(place) {
     try {
-        units = findPrefferedUnits()
-        const json = await getWeatherData(place, units)
+        const json = await getWeatherData(place, findPrefferedUnits())
         const weatherMain = json.main
         const displayName = `${json.name}, ${json.sys.country}`
         const weatherDescription = json.weather[0].description
@@ -38,67 +63,20 @@ async function processWeatherData(place) {
     }
 }
 
-function showErrorMessage() {
-    document.getElementById('warning').classList.add('show')
-}
-
-function hideErrorMessage() {
-    document.getElementById('warning').classList.remove('show')
-}
-
 function animateNewWeather() {
     const main = document.querySelector('main')
     main.classList.add('shrinkMe')
     setTimeout(() => main.classList.remove('shrinkMe'), 1500)
 }
 
-function renderData(dataObject) {
-    animateNewWeather()
-    document.getElementById('title').textContent = dataObject.displayName
-    document.getElementById('info').textContent = dataObject.weatherDescription
-    renderTemperatures(dataObject.temperature, dataObject.feelsLike)
-    document.getElementById('wind').textContent = `Wind : ${Math.round(
-        dataObject.wind
-    )} mph`
-    document.getElementById(
-        'humidity'
-    ).textContent = `Humidity: ${dataObject.weatherHumidity}%`
-}
-
-const cityFinder = document.getElementById('cityFinder')
-const weatherForm = document.getElementById('weatherForm')
-
-cityFinder.addEventListener('input', () => {
-    hideErrorMessage()
-})
-weatherForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-    processWeatherData(cityFinder.value).then((response) => {
-        renderData(response)
-    })
-    cityFinder.value = ''
-})
-
-const tempSwitch = document.getElementById('degree-switch')
-
-tempSwitch.addEventListener('click', () => {
-    changeUnits()
-})
-
-function changeUnits() {
-    console.log('hi')
-    let newTemp
-    let newFeelslike
-    if (tempSwitch.checked) {
-        units = 'metric'
-        temperature = ((Number(temperature) - 32) * 5) / 9
-        feelsLike = ((Number(feelsLike) - 32) * 5) / 9
-    } else if (!tempSwitch.checked) {
-        units = 'imperial'
-        temperature = (Number(temperature) * 9) / 5 + 32
-        feelsLike = (Number(feelsLike) * 9) / 5 + 32
+function formatTemperatures() {
+    let symbol
+    if (units === 'imperial') {
+        symbol = 'F'
+    } else {
+        symbol = 'C'
     }
-    renderTemperatures(temperature, feelsLike)
+    return symbol
 }
 
 function renderTemperatures(temp, tempFeel) {
@@ -115,27 +93,46 @@ function renderTemperatures(temp, tempFeel) {
             )}<span class="degree small-degree">&deg;${symbol}</span></span>`
 }
 
-function formatTemperatures() {
-    let symbol
-    console.log(units)
-    if (units === 'imperial') {
-        symbol = 'F'
-    } else {
-        symbol = 'C'
-    }
-    return symbol
+function renderData(dataObject) {
+    animateNewWeather()
+    document.getElementById('title').textContent = dataObject.displayName
+    document.getElementById('info').textContent = dataObject.weatherDescription
+    renderTemperatures(dataObject.temperature, dataObject.feelsLike)
+    document.getElementById('wind').textContent = `Wind : ${Math.round(
+        dataObject.wind
+    )} mph`
+    document.getElementById(
+        'humidity'
+    ).textContent = `Humidity: ${dataObject.weatherHumidity}%`
 }
 
+weatherForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    processWeatherData(cityFinder.value).then((response) => {
+        renderData(response)
+    })
+    cityFinder.value = ''
+})
+
+// functions for changing from metric to imperial and vice versa
+function changeUnits() {
+    if (tempSwitch.checked) {
+        units = 'metric'
+        temperature = ((Number(temperature) - 32) * 5) / 9
+        feelsLike = ((Number(feelsLike) - 32) * 5) / 9
+    } else if (!tempSwitch.checked) {
+        units = 'imperial'
+        temperature = (Number(temperature) * 9) / 5 + 32
+        feelsLike = (Number(feelsLike) * 9) / 5 + 32
+    }
+    renderTemperatures(temperature, feelsLike)
+}
+
+tempSwitch.addEventListener('click', () => {
+    changeUnits()
+})
+
+// inital city on page load, GO BRONCOS!!!
 processWeatherData('Denver', findPrefferedUnits()).then((response) => {
     renderData(response)
 })
-
-function findPrefferedUnits() {
-    let system
-    if (tempSwitch.checked) {
-        system = 'metric'
-    } else {
-        system = 'imperial'
-    }
-    return system
-}
