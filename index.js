@@ -6,6 +6,7 @@ const cityFinder = document.getElementById('cityFinder')
 const weatherForm = document.getElementById('weatherForm')
 
 async function getWeatherData(city, weatherUnits) {
+    console.log(weatherUnits)
     const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=51f808ad6044666815ba2f99bc610f0b&units=${weatherUnits}`,
         {
@@ -70,11 +71,12 @@ function animateNewWeather() {
 }
 
 function formatTemperatures() {
+    console.log(units)
     let symbol
-    if (units === 'imperial') {
-        symbol = 'F'
-    } else {
+    if (units === 'metric') {
         symbol = 'C'
+    } else {
+        symbol = 'F'
     }
     return symbol
 }
