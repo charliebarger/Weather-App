@@ -1,3 +1,3 @@
-# Weather-App
+# Weather App 
 
-https://github.com/charliebarger
+https://charliebarger.github.io/Weather-App/
